@@ -1,0 +1,534 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="vLLM 의 사용법, 그리고 cloud 환경에서의 배포, 서빙을 설명합니다.">
+      
+      
+      
+        <link rel="canonical" href="https://jonhpark7966.github.io/vLLM_Course/RunpodServerless/">
+      
+      
+        <link rel="prev" href="../MultiGPU/">
+      
+      
+        <link rel="next" href="../Scaling/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>RunpodServerless - vLLM COURSE!</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="vLLM COURSE!" class="md-header__button md-logo" aria-label="vLLM COURSE!" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            vLLM COURSE!
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RunpodServerless
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="vLLM COURSE!" class="md-nav__button md-logo" aria-label="vLLM COURSE!" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    vLLM COURSE!
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QuickStartonRunPod/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    QuickStartonRunPod
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MultiGPU/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MultiGPU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    RunpodServerless
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Scaling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scaling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>RunpodServerless</h1>
+
+<p>Runpod 은 GPU pod을 대여해주기도 하지만, Serveless 옵션도 제공합니다.
+아주 쉽게 ondemand LLM 서비스를 돌릴 수 있습니다.</p>
+<p>참조 - https://github.com/runpod-workers/worker-vllm</p>
+<p><a class="glightbox" href="../rsc/serverless_1.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/serverless_1.png" /></a></p>
+<p>vLLM 이 아닌 Stable Diffusion 이나 임베딩, (캡처에는 빠졌지만) whisper 도 호스팅이 가능합니다.</p>
+<p>아래와 같은 설정창들을 지나고 나면 인스턴스가 생기게 됩니다.</p>
+<ol>
+<li>Model 과 vLLM 설정. 권한이 필요하다면, HF token 까지 설정해주면 됩니다.</li>
+</ol>
+<p>![[serverless_2.png]]</p>
+<ol>
+<li>
+<p>두번째는 vLLM 설정입니다. 아주 아주 많은 셋팅 요소들이 있는데, vLLM engine의 argument 들입니다. 
+   자세한 내용은 <a href="./QuickstartonRunPod">QuickStart</a> 페이지를 보시면 CLI 상에서의 설명이 있습니다. 이와 똑같은 옵션들이 거의 그대로 UI 로 구성 된 것이니 필요에 맞게 값들을 입력해주면 됩니다. </p>
+</li>
+<li>
+<p>vLLM 이 아닌 serverlss setting 란이 더 있는데, 로깅이랑 얼마나 동시 입력을 처리할 것인가에 대한 설정입니다.</p>
+</li>
+</ol>
+<p>![[serverless_3.png]]</p>
+<ol>
+<li>마지막은 GPU 설정을 하는데, 메모리를 기준으로 지정되어있습니다. 메모리가 곧 올릴 수 있는 모델을 결정하니 이렇게 만들었나 봅니다. 같은 16기가 GPU 여도 여러가지 GPU 가 있을 수 있는데, 알아서 남는 자원 보고 띄워줍니다.</li>
+</ol>
+<p>![[serverless_4.png]]</p>
+<p>이렇게 설정을 하고 나면 endpoint 가 생성됩니다. 
+요청을 한번 날려보겠습니다. </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://api.runpod.ai/v2/<span class="o">{</span>endpoint_id<span class="o">}</span>/runsync<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer ${API_KEY}&#39;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;input&quot;: {&quot;prompt&quot;: &quot;오늘 저녁 메뉴 추천 좀..!&quot;}}&#39;</span>
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>{&quot;delayTime&quot;:6074,&quot;executionTime&quot;:257,&quot;id&quot;:&quot;sync-8716c00d-783a-4698-a6a1-9f7eeb9a1150-e1&quot;,&quot;output&quot;:[{&quot;choices&quot;:[{&quot;tokens&quot;:[&quot; 오LCETOHex를 قر�니.._production 중에\toLCET&quot;]}],&quot;usage&quot;:{&quot;input&quot;:11,&quot;output&quot;:16}}],&quot;status&quot;:&quot;COMPLETED&quot;,&quot;workerId&quot;:&quot;4lff10gwwrz14w&quot;} 
+</span></code></pre></div>
+<p>라고 답변이 오는군요. serving 하는 모델이 <code>meta-llama/Llama-3.2-1B-Instruct</code> 라서 어리버리 대답을 했군요.</p>
+<p>이번엔 serverless 모델도 3.1-8B 모델로 바꿔주고, openai compatible 한 chat/completions API endpoint 로 날려보겠습니다.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span><span class="s2">&quot;https://api.runpod.ai/v2/vllm-q7f8fz5ac1mro0/openai/v1/chat/completions&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer {API_KEY}&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">        &quot;model&quot;: &quot;meta-llama/Llama-3.1-8B-Instruct&quot;,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">        &quot;messages&quot;: [</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">            {</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">                &quot;role&quot;: &quot;system&quot;,</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">                &quot;content&quot;: &quot;You are a helpful assistant.&quot;</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">            },</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">            {</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">                &quot;role&quot;: &quot;user&quot;,</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">                &quot;content&quot;: &quot;오늘 저녁 메뉴 추천 좀..!&quot;</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">            }</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">        ]</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">    }&#39;</span>
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>{&quot;choices&quot;:[{&quot;finish_reason&quot;:&quot;stop&quot;,&quot;index&quot;:0,&quot;logprobs&quot;:null,&quot;message&quot;:{&quot;content&quot;:&quot;오늘 저녁 메뉴를 추천해 드릴게요!\n\n1.  **갈비탕**: 한복판에 대표적인 음식 중 하나인 갈비탕은 기름 진 갈비와 함께 끓여낸 국물로 가득한 음식입니다. 갈비와 국물이 함께하는 맛있는 음식이요!\n2.  **불고기**: 소고기หร�거나 쇠고기를 통째로 불고기반에 간장, 설탕, bàn muối 등으로 조리하여熟련된 맛을 내는 음식입니다.\n3.  **불닭갈비**: 갈비를 불닭장과 섞어간 후에 불려낸 국물에ใส워서 국물이 가득한 음식입니다.\n4.  **치킨**: 치킨은 미국에서 유래된 음식으로 기름에 튀겨낸 닭 고기를 의미합니다. 간혹 치킨의 요리법은 맛을 내는 부분을 말씀드리자면, 기름에 튀겨낸 후에 마늘과 후추, 생강 등과 함께 간장을 뿌려 그 맛을 내는 음식입니다.\n5.  **해물파스타**: 해물파스타는 파스타에 해물찌개를 얹어 집에만 있는 해물찌개의 맛을 내는 음식입니다. 해물찌개의 맛을 내는 해물찌개는 해물찌개에 해물찌개를 꼭 넣어서 끓여낸 후에 파스타에 얹어 주는 음식입니다.\n\n위의 메뉴 중 하나로 선택해 주시면 좋을 것 같습니다.&quot;,&quot;role&quot;:&quot;assistant&quot;,&quot;tool_calls&quot;:[]},&quot;stop_reason&quot;:null}],&quot;created&quot;:1729425952,&quot;id&quot;:&quot;chat-3fecdfddffe041fd8a0c33b701a3d3f9&quot;,&quot;model&quot;:&quot;meta-llama/Llama-3.1-8B-Instruct&quot;,&quot;object&quot;:&quot;chat.completion&quot;,&quot;prompt_logprobs&quot;:null,&quot;usage&quot;:{&quot;completion_tokens&quot;:357,&quot;prompt_tokens&quot;:51,&quot;total_tokens&quot;:408}}
+</span></code></pre></div>
+<p>이렇게 답변이 왔군요 ...!</p>
+<p>아래와 같이
+- API endpoint 들, 현재 inference 양에 따라 차징되는 금액
+- 실시간으로 worker들이 올라갔다 내려갔다, 로그와 함께 metrics 들을 볼 수 있습니다.</p>
+<p><a class="glightbox" href="../rsc/serverless_5.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/serverless_5.png" /></a></p>
+<p>UI 상 제공하는 내용들이 사실 훨씬 많은데, 영상 형태여야 잘 보일 수 있겠더군요.</p>
+<p>요약하자면,
+- 누구나 Open된 모델을 원클릭으로 돌릴 수 있습니다.
+- 심지어 On-Demand 로 돌고요,
+- 어느 정도 Auto-Scaling 도 됩니다.
+- OpenAI Compatible 해서 호환성도 좋습니다.</p>
+<p>첨언 조금만 하자면
+미쳤네요 그냥. LambdaLabs 에 GPU 가 동나서 runpod으로 이사왔는데, 너무 많은 것들이 쉽게 됩니다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../MultiGPU/" class="md-footer__link md-footer__link--prev" aria-label="Previous: MultiGPU">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                MultiGPU
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../Scaling/" class="md-footer__link md-footer__link--next" aria-label="Next: Scaling">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Scaling
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.path", "navigation.instant", "navigation.tracking", "navigation.sections", "navigation.footer"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
