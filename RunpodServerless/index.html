@@ -378,7 +378,7 @@
 <ol>
 <li>Model 과 vLLM 설정. 권한이 필요하다면, HF token 까지 설정해주면 됩니다.</li>
 </ol>
-<p>![[serverless_2.png]]</p>
+<p><a class="glightbox" href="../rsc/serverless_2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/serverless_2.png" /></a></p>
 <ol>
 <li>
 <p>두번째는 vLLM 설정입니다. 아주 아주 많은 셋팅 요소들이 있는데, vLLM engine의 argument 들입니다. 
@@ -388,11 +388,11 @@
 <p>vLLM 이 아닌 serverlss setting 란이 더 있는데, 로깅이랑 얼마나 동시 입력을 처리할 것인가에 대한 설정입니다.</p>
 </li>
 </ol>
-<p>![[serverless_3.png]]</p>
+<p><a class="glightbox" href="../rsc/serverless_3.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/serverless_3.png" /></a></p>
 <ol>
 <li>마지막은 GPU 설정을 하는데, 메모리를 기준으로 지정되어있습니다. 메모리가 곧 올릴 수 있는 모델을 결정하니 이렇게 만들었나 봅니다. 같은 16기가 GPU 여도 여러가지 GPU 가 있을 수 있는데, 알아서 남는 자원 보고 띄워줍니다.</li>
 </ol>
-<p>![[serverless_4.png]]</p>
+<p><a class="glightbox" href="../rsc/serverless_4.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/serverless_4.png" /></a></p>
 <p>이렇게 설정을 하고 나면 endpoint 가 생성됩니다. 
 요청을 한번 날려보겠습니다. </p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://api.runpod.ai/v2/<span class="o">{</span>endpoint_id<span class="o">}</span>/runsync<span class="w"> </span><span class="se">\</span>
