@@ -102,6 +102,23 @@ OpenAI compatible 한 서버니, chat completion api 를 호출합니다. 대답
 `--quantization, -q`
 - Quantized 옵션입니다. 다음과 같은 후보들이 있죠. aqlm, awq, deepspeedfp, tpu_int8, fp8, fbgemm_fp8, modelopt, marlin, gguf, gptq_marlin_24, gptq_marlin, awq_marlin, gptq, compressed-tensors, bitsandbytes, qqq, experts_int8, neuron_quant, ipex, None
 - 참. 여기는 통일이 안되어서 갑갑한데요, 그래도 bnb 가 가장 많이 사용되는 것 같고요, 만들어진 모델을 잘 보고 맞춰주시면 됩니다. 직접 quantization 하실 분들은 이미 잘 아실테니 자세한 설명은 생략합니다.
+- 
+
+On RTX3090 Ubuntu
+
+```
+$ vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct
+
+The model's max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (41152)
+```
+
+```
+$ vllm serve unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit --quantization bitsandbytes --load-format bitsandbytes
+
+The model's max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (119712)
+```
+  
+
 
 `--load-format`
 - 모델의 파라미터들 포맷을 지정해줍니다, 꼭 Quantization 이랑만 관련이 있는 것은 아니지만, quantized 모델을 로드하는 경우에 위 -q 옵션이랑 잘 맞춰주지 않으면 에러가 잘 나기 떄문에 이 파트에 설명합니다.
