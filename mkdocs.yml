@@ -1,0 +1,56 @@
+site_name: vLLM COURSE!
+site_url: https://jonhpark7966.github.io/vLLM_Course/
+site_description: vLLM 의 사용법, 그리고 cloud 환경에서의 배포, 서빙을 설명합니다.
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: "blue"
+      accent: "blue"
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: "blue"
+      accent: "blue"
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  font:
+    text: "Noto Sans KR" # Change to your preferred Korean font
+    code: "Fira Code"
+
+  features:
+    - navigation.expand
+    - navigation.path
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.footer
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+nav:
+  - index.md
+  - "QuickStartonRunPod.md"
+  - "MultiGPU.md"
+  - "RunpodServerless.md"
+  - "Scaling.md"
+
+plugins:
+  - glightbox
+  - search
+  - mkdocs-jupyter
