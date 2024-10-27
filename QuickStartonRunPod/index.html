@@ -352,15 +352,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      Metrics
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -381,6 +372,26 @@
   
   <span class="md-ellipsis">
     MultiGPU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Metrics_Prometheus%26Grafana/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vLLM 프로메테우스 &amp; 그라파나 모니터링
   </span>
   
 
@@ -504,15 +515,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      Metrics
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -542,6 +544,9 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_TOKEN</span><span class="o">=</span>HF-TOKEN
 </span></code></pre></div>
 <p>이제 vLLM 서빙을 시작합니다. </p>
+<blockquote>
+<p>default 로는 8000 포트로 api endpoint 들이 생기는 데, runpod 에서 이를 받을 수 있게, https port 들을 미리 설정해둬야 합니다!!!</p>
+</blockquote>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>meta-llama/Llama-3.1-8B-Instruct
 </span></code></pre></div>
 <p>Runpod ID 로 serving 이 되고 있는지 날려봅니다, 131k 입력을 받는 llama3.1 이 서빙 되고 있군요. </p>
@@ -594,7 +599,10 @@
 </ul>
 <p><code>--quantization, -q</code>
 - Quantized 옵션입니다. 다음과 같은 후보들이 있죠. aqlm, awq, deepspeedfp, tpu_int8, fp8, fbgemm_fp8, modelopt, marlin, gguf, gptq_marlin_24, gptq_marlin, awq_marlin, gptq, compressed-tensors, bitsandbytes, qqq, experts_int8, neuron_quant, ipex, None
-- 참. 여기는 통일이 안되어서 갑갑한데요, 그래도 bnb 가 가장 많이 사용되는 것 같고요, 만들어진 모델을 잘 보고 맞춰주시면 됩니다. 직접 quantization 하실 분들은 이미 잘 아실테니 자세한 설명은 생략합니다.</p>
+- 참. 여기는 통일이 안되어서 갑갑한데요, 그래도 bnb 가 가장 많이 사용되는 것 같고요, 만들어진 모델을 잘 보고 맞춰주시면 됩니다. 
+- Bitsandbytes 가 허깅페이스에서 가장 대중적인 포맷이나, 효율성이나 성능이 제일 좋은 것은 아니라고 보여집니다.
+- AWQ 나 GPTQ 를 많이 사용하는 추세 입니다.
+- 직접 quantization 하실 분들은 이미 잘 아실테니 자세한 설명은 생략하고요, 대부분은 inference 서빙을 시작하기 전에 다양하게 quantiazation 한 후, 모두 테스트를 돌려보고, 성능/효율을 비교하여 결정하는 것 같습니다.</p>
 <p><code>--load-format</code>
 - 모델의 파라미터들 포맷을 지정해줍니다, 꼭 Quantization 이랑만 관련이 있는 것은 아니지만, quantized 모델을 로드하는 경우에 위 -q 옵션이랑 잘 맞춰주지 않으면 에러가 잘 나기 떄문에 이 파트에 설명합니다.
 - bnb 모델을 로드하시면 여기도 똑같이 bnb 맞춰주시면 됩니다.
@@ -610,49 +618,6 @@
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>The model&#39;s max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (119712)
 </span></code></pre></div>
-<h2 id="metrics">Metrics</h2>
-<p>vllm 을 서빙하면 <code>/metrics</code> endpoint 에서 지표들을 관찰 가능합니다.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a># HELP vllm:num_requests_running Number of requests currently running on GPU.
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a># TYPE vllm:num_requests_running gauge
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>vllm:num_requests_running{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a># HELP vllm:num_requests_swapped Number of requests swapped to CPU.
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a># TYPE vllm:num_requests_swapped gauge
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>vllm:num_requests_swapped{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a># HELP vllm:num_requests_waiting Number of requests waiting to be processed.
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a># TYPE vllm:num_requests_waiting gauge
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>vllm:num_requests_waiting{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a># HELP vllm:gpu_cache_usage_perc GPU KV-cache usage. 1 means 100 percent usage.
-</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a># TYPE vllm:gpu_cache_usage_perc gauge
-</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>vllm:gpu_cache_usage_perc{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a># HELP vllm:cpu_cache_usage_perc CPU KV-cache usage. 1 means 100 percent usage.
-</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a># TYPE vllm:cpu_cache_usage_perc gauge
-</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>vllm:cpu_cache_usage_perc{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a># HELP vllm:cpu_prefix_cache_hit_rate CPU prefix cache block hit rate.
-</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a># TYPE vllm:cpu_prefix_cache_hit_rate gauge
-</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>vllm:cpu_prefix_cache_hit_rate{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} -1.0
-</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a># HELP vllm:gpu_prefix_cache_hit_rate GPU prefix cache block hit rate.
-</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a># TYPE vllm:gpu_prefix_cache_hit_rate gauge
-</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>vllm:gpu_prefix_cache_hit_rate{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} -1.0
-</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a># HELP vllm:avg_prompt_throughput_toks_per_s Average prefill throughput in tokens/s.
-</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a># TYPE vllm:avg_prompt_throughput_toks_per_s gauge
-</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>vllm:avg_prompt_throughput_toks_per_s{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a># HELP vllm:avg_generation_throughput_toks_per_s Average generation throughput in tokens/s.
-</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a># TYPE vllm:avg_generation_throughput_toks_per_s gauge
-</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>vllm:avg_generation_throughput_toks_per_s{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a># HELP vllm:cache_config_info Information of the LLMEngine CacheConfig
-</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a># TYPE vllm:cache_config_info gauge
-</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>vllm:cache_config_info{block_size=&quot;16&quot;,cache_dtype=&quot;auto&quot;,cpu_offload_gb=&quot;0&quot;,enable_prefix_caching=&quot;False&quot;,gpu_memory_utilization=&quot;0.9&quot;,num_cpu_blocks=&quot;2048&quot;,num_gpu_blocks=&quot;2375&quot;,num_gpu_blocks_override=&quot;None&quot;,sliding_window=&quot;None&quot;,swap_space_bytes=&quot;4294967296&quot;} 1.0
-</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a># HELP vllm:num_preemptions_total Cumulative number of preemption from the engine.
-</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a># TYPE vllm:num_preemptions_total counter
-</span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>vllm:num_preemptions_total{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a># HELP vllm:prompt_tokens_total Number of prefill tokens processed.
-</span><span id="__span-6-35"><a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a># TYPE vllm:prompt_tokens_total counter
-</span><span id="__span-6-36"><a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>vllm:prompt_tokens_total{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span><span id="__span-6-37"><a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a># HELP vllm:generation_tokens_total Number of generation tokens processed.
-</span><span id="__span-6-38"><a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a># TYPE vllm:generation_tokens_total counter
-</span><span id="__span-6-39"><a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>vllm:generation_tokens_total{model_name=&quot;meta-llama/Llama-3.1-8B-Instruct&quot;} 0.0
-</span></code></pre></div>
-<p>참고로, vllm backend 를 사용하는 nvidia triton 컨테이너는 24.08 버전 부터 지원하니 참고하세요.</p>
 
 
 

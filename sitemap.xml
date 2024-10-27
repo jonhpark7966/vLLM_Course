@@ -2,27 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://jonhpark7966.github.io/vLLM_Course/</loc>
-         <lastmod>2024-10-20</lastmod>
+         <lastmod>2024-10-27</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://jonhpark7966.github.io/vLLM_Course/Metrics_Prometheus%26Grafana/</loc>
+         <lastmod>2024-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://jonhpark7966.github.io/vLLM_Course/MultiGPU/</loc>
-         <lastmod>2024-10-20</lastmod>
+         <lastmod>2024-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://jonhpark7966.github.io/vLLM_Course/QuickStartonRunPod/</loc>
-         <lastmod>2024-10-20</lastmod>
+         <lastmod>2024-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://jonhpark7966.github.io/vLLM_Course/RunpodServerless/</loc>
-         <lastmod>2024-10-20</lastmod>
+         <lastmod>2024-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://jonhpark7966.github.io/vLLM_Course/Scaling/</loc>
-         <lastmod>2024-10-20</lastmod>
+         <lastmod>2024-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
