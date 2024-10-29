@@ -10,11 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://jonhpark7966.github.io/vLLM_Course/Scaling/">
+        <link rel="canonical" href="https://jonhpark7966.github.io/vLLM_Course/VisionModel/">
       
       
-        <link rel="prev" href="../RunpodServerless/">
+        <link rel="prev" href="../LoRA/">
       
+      
+        <link rel="next" href="../RunpodServerless/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -22,7 +24,7 @@
     
     
       
-        <title>Scaling - vLLM COURSE!</title>
+        <title>VisionModel - vLLM COURSE!</title>
       
     
     
@@ -82,11 +84,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#multi-node" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -119,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Scaling
+              VisionModel
             
           </span>
         </div>
@@ -335,10 +332,17 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../VisionModel/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -347,6 +351,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -375,28 +380,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Scaling
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../Scaling/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -405,42 +392,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#multi-node" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi - Node
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#skypilot" class="md-nav__link">
-    <span class="md-ellipsis">
-      SkyPilot
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -463,32 +414,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#multi-node" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi - Node
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#skypilot" class="md-nav__link">
-    <span class="md-ellipsis">
-      SkyPilot
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -502,66 +427,63 @@
                   
 
 
-<h2 id="multi-node">Multi - Node</h2>
-<p>이번엔 더 큰 모델을 돌리고 싶어요. 70B 모델을 올려보겠습니다.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>meta-llama/Llama-3.1-70B-Instruct<span class="w"> </span>--tensor-parallel-size<span class="w"> </span><span class="m">2</span>
+  <h1>VisionModel</h1>
+
+<p>Image 를 input으로 제공받는 모델을 서빙하고 테스트 해보겠습니다.<br />
+OpenAI Vision API 와 호환이 가능하게 서빙을 하면, GPT-4V 나 GPT-4o로 구현된 LLM application 에 호환이 좋겠죠.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>microsoft/Phi-3.5-vision-instruct<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--limit-mm-per-prompt<span class="w"> </span><span class="nv">image</span><span class="o">=</span><span class="m">2</span>
 </span></code></pre></div>
-<p>역시 OutOfMemory 가 발생합니다.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 224.00 MiB. GPU 0 has a total capacity of 44.34 GiB of which 64.81 MiB is free....
+<p>OpenAI Vision API 는 Chat Completion 스타일에 추가가 되어있죠, 그래서 vllm 으로 서빙시에 Chat Template 이 필수 입니다. 위에서 사용한 Phi-3.5-vision-instruct 모델은 chat template 이 내장이기 때문에 문제는 없지만, 다른 모델들은 확인을 해야합니다.  </p>
+<p>아래와 같은 이미지를 입력하는 예시로 사용하면 chat completion openai API 로 바로 사용이 가능합니다.  </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;EMPTY&quot;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">openai_api_base</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8000/v1&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">api_key</span><span class="o">=</span><span class="n">openai_api_key</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">base_url</span><span class="o">=</span><span class="n">openai_api_base</span><span class="p">,</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># Single-image input inference</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">image_url</span> <span class="o">=</span> <span class="s2">&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg&quot;</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">chat_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;microsoft/Phi-3.5-vision-instruct&quot;</span><span class="p">,</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>            <span class="c1"># NOTE: The prompt formatting with the image token `&lt;image&gt;` is not needed</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>            <span class="c1"># since the prompt will be processed automatically by the API server.</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;What’s in this image?&quot;</span><span class="p">},</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span> <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">image_url</span><span class="p">}},</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>        <span class="p">],</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>    <span class="p">}],</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="p">)</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Chat completion output:&quot;</span><span class="p">,</span> <span class="n">chat_response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="c1"># Multi-image input inference</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="n">image_url_duck</span> <span class="o">=</span> <span class="s2">&quot;https://upload.wikimedia.org/wikipedia/commons/d/da/2015_Kaczka_krzy%C5%BCowka_w_wodzie_</span><span class="si">%28s</span><span class="s2">amiec%29.jpg&quot;</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="n">image_url_lion</span> <span class="o">=</span> <span class="s2">&quot;https://upload.wikimedia.org/wikipedia/commons/7/77/002_The_lion_king_Snyggve_in_the_Serengeti_National_Park_Photo_by_Giles_Laurent.jpg&quot;</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="n">chat_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;microsoft/Phi-3.5-vision-instruct&quot;</span><span class="p">,</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;What are the animals in these images?&quot;</span><span class="p">},</span>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span> <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">image_url_duck</span><span class="p">}},</span>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span> <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">image_url_lion</span><span class="p">}},</span>
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>        <span class="p">],</span>
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>    <span class="p">}],</span>
+</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="p">)</span>
+</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Chat completion output:&quot;</span><span class="p">,</span> <span class="n">chat_response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
 </span></code></pre></div>
-<p>멀티 노드로 확장을 해야합니다.
-(사실 70B 모델은 GPU를 그냥 많이 달아도 되긴 하지만 멀티 노드 테스트를 위한 실습입니다)
-2개의 컨테이너를 띄워 줍니다. </p>
-<p><a class="glightbox" href="../rsc/pod_a40x2x2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/pod_a40x2x2.png" /></a></p>
-<p>2개의 도커 이미지를 연결할 것인데, host 와 worker 를 모아서 클러스터를 구성해야합니다. vllm cluster는 <a href="https://github.com/vllm-project/vllm/blob/main/examples/run_cluster.sh">run_cluster.sh</a> 스크립트를 참조해서 ray 로 구성했습니다. </p>
-<p>LambdaLabs 도 그렇고, RunPod 도 그렇고, 클러스터 host를 안쪽에 두면 워커노드들이 접속하기가 어려워요. Firewall 설정이 조금 복잡합니다. 그래서 host는 확실하게 public ip 로 제가 다 네트워크 컨트롤 권한을 가진 홈서버로 진행했습니다. </p>
-<p>버전 호환을 위해 홈서버에 똑같이 도커 이미지를 올려줍니다.
-(버전이 조금만 달라도 클러스터 구성이 잘 안됩니다.)</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">6379</span>:6379<span class="w"> </span>konuu/llm_ready:latest<span class="w"> </span>/bin/bash
-</span></code></pre></div>
-<p>그리고, 호스트가 될 노드를 켜줍니다. </p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ray<span class="w"> </span>start<span class="w"> </span>--block<span class="w"> </span>--head<span class="w"> </span>--port<span class="o">=</span><span class="m">6379</span>
-</span></code></pre></div>
-<p>RunPod 에서 띄운 두 개의 GPU pod 들에서 host 로 연결 해줍니다. 
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>ray<span class="w"> </span>start<span class="w"> </span>--block<span class="w"> </span>--address<span class="o">=</span><span class="s1">&#39;jonhpark.iptime.org:6379&#39;</span>
-</span></code></pre></div></p>
-<p>그리고, <code>ray status</code> 를 찍어보면 잘 연결이 되었는지 볼 수 있습니다.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>root@b9aa63cc7a54:/# ray status
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>======== Autoscaler status: 2024-10-19 16:55:27.171800 ========
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Node status
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>---------------------------------------------------------------
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>Active:
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a> 1 node_f7f6fb1cc9bc0458714ac8368cee8da2191feebd5701ca46ba920903
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a> 1 node_7af94f3b6d67a3c0477ec12a39970f8dd3cb0b9527db400a9ce044a0
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a> 1 node_b818e9149e8de461e242348ad7bc98a0f8ea91cf1854132061590284
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>Pending:
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a> (no pending nodes)
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>Recent failures:
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a> (no failures)
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>Resources
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>---------------------------------------------------------------
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>Usage:
-</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a> 0.0/36.0 CPU
-</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a> 0.0/4.0 GPU
-</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a> 0B/134.45GiB memory
-</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a> 0B/57.94GiB object_store_memory
-</span></code></pre></div>
-<p>그런데, 자꾸 금방 죽어서 불안하네요. 아무래도 1CC 가 필요한데, 1주일씩 reserve 를 해야하기 떄문에, lambda labs 기준 12000 달러가 필요합니다... ㅠㅠ </p>
-<h1 id="skypilot">SkyPilot</h1>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a># for MACOS 
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a># pip uninstall grpcio; conda install -c conda-forge grpcio=1.43.0
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>conda create -y -n sky python=3.10
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>conda activate sky
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>pip install &quot;skypilot[runpod]&quot;
-</span></code></pre></div>
-<p>runpod 기준</p>
-<p>api key 발급 후</p>
-<p>pip install "runpod&gt;=1.5.1"
-runpod config</p>
+<blockquote>
+<p>참고!</p>
+</blockquote>
+<p>https://github.com/vllm-project/vllm/pull/7916</p>
 
 
 
@@ -591,7 +513,7 @@ runpod config</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../RunpodServerless/" class="md-footer__link md-footer__link--prev" aria-label="Previous: RunpodServerless">
+          <a href="../LoRA/" class="md-footer__link md-footer__link--prev" aria-label="Previous: LoRA Adapters">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -601,11 +523,27 @@ runpod config</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                RunpodServerless
+                LoRA Adapters
               </div>
             </div>
           </a>
         
+        
+          
+          <a href="../RunpodServerless/" class="md-footer__link md-footer__link--next" aria-label="Next: RunpodServerless">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                RunpodServerless
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
         
       </nav>
     

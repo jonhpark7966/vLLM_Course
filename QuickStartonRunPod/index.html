@@ -13,8 +13,6 @@
         <link rel="canonical" href="https://jonhpark7966.github.io/vLLM_Course/QuickStartonRunPod/">
       
       
-        <link rel="prev" href="..">
-      
       
         <link rel="next" href="../MultiGPU/">
       
@@ -237,26 +235,6 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Contents
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -347,6 +325,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#lora" class="md-nav__link">
+    <span class="md-ellipsis">
+      LoRA 관련
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -392,6 +379,66 @@
   
   <span class="md-ellipsis">
     vLLM 프로메테우스 &amp; 그라파나 모니터링
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quantization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LoRA/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LoRA Adapters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../VisionModel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    VisionModel
   </span>
   
 
@@ -510,6 +557,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#lora" class="md-nav__link">
+    <span class="md-ellipsis">
+      LoRA 관련
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -540,44 +596,50 @@
 </blockquote>
 <p>개인적으로는 container 가 올라간 것이 아니라 하드웨어를 빌려주는 LambdaLabs 를 선호하는데, 요즘 GPU 가 동나서... 빌리기가 힘드네요.</p>
 <p><a class="glightbox" href="../rsc/402.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/402.png" /></a></p>
+<p>지금은 vllm 이 이미 설치된 컨테이너를 띄우지만, 없다면 그냥 pip 로 설치하시면 됩니다.
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install vLLM with CUDA 12.1.</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>vllm
+</span></code></pre></div></p>
 <p>서빙을 한번 해보죠, 환경변수 셋업을 한번 합니다.  meta-llama 는 허깅페이스에서 권한을 받아야만 사용이 가능하니, 미리 승인을 받아두시고 huggingface token을 등록합니다. </p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_TOKEN</span><span class="o">=</span>HF-TOKEN
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_TOKEN</span><span class="o">=</span>HF-TOKEN
 </span></code></pre></div>
 <p>이제 vLLM 서빙을 시작합니다. </p>
 <blockquote>
 <p>default 로는 8000 포트로 api endpoint 들이 생기는 데, runpod 에서 이를 받을 수 있게, https port 들을 미리 설정해둬야 합니다!!!</p>
 </blockquote>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>meta-llama/Llama-3.1-8B-Instruct
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>meta-llama/Llama-3.1-8B-Instruct
 </span></code></pre></div>
 <p>Runpod ID 로 serving 이 되고 있는지 날려봅니다, 131k 입력을 받는 llama3.1 이 서빙 되고 있군요. </p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>❯<span class="w"> </span>curl<span class="w"> </span>https://36g54goiy09px8-8000.proxy.runpod.net/v1/models
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="o">{</span><span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;list&quot;</span>,<span class="s2">&quot;data&quot;</span>:<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;meta-llama/Llama-3.1-8B-Instruct&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;model&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729342516,<span class="s2">&quot;owned_by&quot;</span>:<span class="s2">&quot;vllm&quot;</span>,<span class="s2">&quot;root&quot;</span>:<span class="s2">&quot;meta-llama/Llama-3.1-8B-Instruct&quot;</span>,<span class="s2">&quot;parent&quot;</span>:null,<span class="s2">&quot;max_model_len&quot;</span>:131072,<span class="s2">&quot;permission&quot;</span>:<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;modelperm-f4239c4af18545faabe2190499d6b567&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;model_permission&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729342516,<span class="s2">&quot;allow_create_engine&quot;</span>:false,<span class="s2">&quot;allow_sampling&quot;</span>:true,<span class="s2">&quot;allow_logprobs&quot;</span>:true,<span class="s2">&quot;allow_search_indices&quot;</span>:false,<span class="s2">&quot;allow_view&quot;</span>:true,<span class="s2">&quot;allow_fine_tuning&quot;</span>:false,<span class="s2">&quot;organization&quot;</span>:<span class="s2">&quot;*&quot;</span>,<span class="s2">&quot;group&quot;</span>:null,<span class="s2">&quot;is_blocking&quot;</span>:false<span class="o">}]}]}</span>%<span class="w">   </span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>❯<span class="w"> </span>curl<span class="w"> </span>https://36g54goiy09px8-8000.proxy.runpod.net/v1/models
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="o">{</span><span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;list&quot;</span>,<span class="s2">&quot;data&quot;</span>:<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;meta-llama/Llama-3.1-8B-Instruct&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;model&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729342516,<span class="s2">&quot;owned_by&quot;</span>:<span class="s2">&quot;vllm&quot;</span>,<span class="s2">&quot;root&quot;</span>:<span class="s2">&quot;meta-llama/Llama-3.1-8B-Instruct&quot;</span>,<span class="s2">&quot;parent&quot;</span>:null,<span class="s2">&quot;max_model_len&quot;</span>:131072,<span class="s2">&quot;permission&quot;</span>:<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;modelperm-f4239c4af18545faabe2190499d6b567&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;model_permission&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729342516,<span class="s2">&quot;allow_create_engine&quot;</span>:false,<span class="s2">&quot;allow_sampling&quot;</span>:true,<span class="s2">&quot;allow_logprobs&quot;</span>:true,<span class="s2">&quot;allow_search_indices&quot;</span>:false,<span class="s2">&quot;allow_view&quot;</span>:true,<span class="s2">&quot;allow_fine_tuning&quot;</span>:false,<span class="s2">&quot;organization&quot;</span>:<span class="s2">&quot;*&quot;</span>,<span class="s2">&quot;group&quot;</span>:null,<span class="s2">&quot;is_blocking&quot;</span>:false<span class="o">}]}]}</span>%<span class="w">   </span>
 </span></code></pre></div>
 <p>OpenAI compatible 한 서버니, chat completion api 를 호출합니다. 대답 토큰이 날라옵니다 !!</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>❯<span class="w"> </span>curl<span class="w"> </span>https://36g54goiy09px8-8000.proxy.runpod.net/v1/chat/completions<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$API_KEY</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">    &quot;model&quot;: &quot;meta-llama/Llama-3.1-8B-Instruct&quot;,</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">    &quot;messages&quot;: [</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">      {</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">        &quot;role&quot;: &quot;system&quot;,</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">        &quot;content&quot;: &quot;You are a helpful assistant.&quot;</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">      },</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s1">      {</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">        &quot;role&quot;: &quot;user&quot;,</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s1">        &quot;content&quot;: &quot;Hello!&quot;</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s1">      }</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s1">    ]</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s1">  }&#39;</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="o">{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;chat-076af67d9cff46659af30b617a44a490&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;chat.completion&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729342638,<span class="s2">&quot;model&quot;</span>:<span class="s2">&quot;meta-llama/Llama-3.1-8B-Instruct&quot;</span>,<span class="s2">&quot;choices&quot;</span>:<span class="o">[{</span><span class="s2">&quot;index&quot;</span>:0,<span class="s2">&quot;message&quot;</span>:<span class="o">{</span><span class="s2">&quot;role&quot;</span>:<span class="s2">&quot;assistant&quot;</span>,<span class="s2">&quot;content&quot;</span>:<span class="s2">&quot;Hello! How can I assist you today?&quot;</span>,<span class="s2">&quot;tool_calls&quot;</span>:<span class="o">[]}</span>,<span class="s2">&quot;logprobs&quot;</span>:null,<span class="s2">&quot;finish_reason&quot;</span>:<span class="s2">&quot;stop&quot;</span>,<span class="s2">&quot;stop_reason&quot;</span>:null<span class="o">}]</span>,<span class="s2">&quot;usage&quot;</span>:<span class="o">{</span><span class="s2">&quot;prompt_tokens&quot;</span>:43,<span class="s2">&quot;total_tokens&quot;</span>:53,<span class="s2">&quot;completion_tokens&quot;</span>:10<span class="o">}</span>,<span class="s2">&quot;prompt_logprobs&quot;</span>:null<span class="o">}</span>%<span class="w"> </span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>❯<span class="w"> </span>curl<span class="w"> </span>https://36g54goiy09px8-8000.proxy.runpod.net/v1/chat/completions<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$API_KEY</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">    &quot;model&quot;: &quot;meta-llama/Llama-3.1-8B-Instruct&quot;,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">    &quot;messages&quot;: [</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">      {</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">        &quot;role&quot;: &quot;system&quot;,</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">        &quot;content&quot;: &quot;You are a helpful assistant.&quot;</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">      },</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">      {</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">        &quot;role&quot;: &quot;user&quot;,</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">        &quot;content&quot;: &quot;Hello!&quot;</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">      }</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">    ]</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">  }&#39;</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="o">{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;chat-076af67d9cff46659af30b617a44a490&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;chat.completion&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729342638,<span class="s2">&quot;model&quot;</span>:<span class="s2">&quot;meta-llama/Llama-3.1-8B-Instruct&quot;</span>,<span class="s2">&quot;choices&quot;</span>:<span class="o">[{</span><span class="s2">&quot;index&quot;</span>:0,<span class="s2">&quot;message&quot;</span>:<span class="o">{</span><span class="s2">&quot;role&quot;</span>:<span class="s2">&quot;assistant&quot;</span>,<span class="s2">&quot;content&quot;</span>:<span class="s2">&quot;Hello! How can I assist you today?&quot;</span>,<span class="s2">&quot;tool_calls&quot;</span>:<span class="o">[]}</span>,<span class="s2">&quot;logprobs&quot;</span>:null,<span class="s2">&quot;finish_reason&quot;</span>:<span class="s2">&quot;stop&quot;</span>,<span class="s2">&quot;stop_reason&quot;</span>:null<span class="o">}]</span>,<span class="s2">&quot;usage&quot;</span>:<span class="o">{</span><span class="s2">&quot;prompt_tokens&quot;</span>:43,<span class="s2">&quot;total_tokens&quot;</span>:53,<span class="s2">&quot;completion_tokens&quot;</span>:10<span class="o">}</span>,<span class="s2">&quot;prompt_logprobs&quot;</span>:null<span class="o">}</span>%<span class="w"> </span>
 </span></code></pre></div>
 <h2 id="arguments">Arguments</h2>
 <p><code>vllm serve</code> 커맨드의 arguments 중, 알 필요가 있다고 생각 되는 부분들만 뽑아서 정리합니다.</p>
 <p><code>--model</code>
 - 당연히 첫번째는 모델이고요, hugging face 주소를 입력하면 됩니다. huggingface 대신 modelscope 으로 갈 수도 있긴한데, 중국 쪽을 타겟으로 하지 않는 한 아마도 huggingface 면 충분하지 않을까 싶네요.</p>
+<p><code>--disable-log-requests</code>
+- 로깅 끄기, 실제로 서빙하면 로그는 속도를 위해 끄시는게 좋겠죠.</p>
 <h3 id="_2">메모리 관련</h3>
 <p><code>--max-model-len</code>
 - 모델의 content 길이 입니다. 기본적으로는 모델에 설정된 config 를 따라갑니다. 그런데, 요즘 모델들은 과하게 긴 context length 를 가지고 있죠. (Llama-3.1-8B 는 131k 를 받을 수 있습니다. )
@@ -585,6 +647,8 @@
 <p><code>--gpu-memory-utilization</code>
 - GPU 메모리 사용량을 지정합니다. vLLM 의 핵심 알고리즘인 Paged Attention 특성상 메모리를 greedy 하게 가져가기 떄문에, 지정하면 그냥 다 먹습니다, 다른 GPU 메모리가 필요한 일이 있다면, 망가지겠죠.
 - 이는 0 ~ 1 비율이고, 전체 메모리에 대한 비율이 아니라 남아있는 메모리에 대한 비율입니다. LLM 을 서빙하면 보통은 하나를 통쨰로 가져갈테니 default 값인 0.9 가 나쁘지 않은 것 같습니다.</p>
+<p><code>--cpu-offload-gb</code>
+- CPU 메모리에 오프로딩합니다, 24GB GPU 가 있고, 10GB 를 오프로딩 해주면, 34GB 있다고 볼 수 있고요, 그래서 13B BF16 모델 (26GB) 도 돌릴 수가 있습니다. 느립니다...</p>
 <h3 id="multi-gpu">Multi GPU 관련</h3>
 <p><code>--pipeline-parallel-size, -pp</code>
 - 여러 개의 GPU 로 병렬 처리 합니다. parallelism level 은 layer 단위로요. high throughput 에 도움이 됩니다. 메모리가 부족한 경우에도 효과가 있습니다.</p>
@@ -607,17 +671,12 @@
 - 모델의 파라미터들 포맷을 지정해줍니다, 꼭 Quantization 이랑만 관련이 있는 것은 아니지만, quantized 모델을 로드하는 경우에 위 -q 옵션이랑 잘 맞춰주지 않으면 에러가 잘 나기 떄문에 이 파트에 설명합니다.
 - bnb 모델을 로드하시면 여기도 똑같이 bnb 맞춰주시면 됩니다.
 - 가능 옵션들:  auto, pt, safetensors, npcache, dummy, tensorizer, sharded_state, gguf, bitsandbytes, mistral</p>
-<p>제 개인 3090 머신에서 테스트한 결과입니다.
-8B 모델은 기본 상태에서 <code>KV cache (41152)</code> 밖에 메모리에 모델에 못 올려서 context 줄이거나 해야합니다.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>The model&#39;s max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (41152)
-</span></code></pre></div>
-<p>unsloth 에서 만들어준 4bit quantized model 의 경우 역시 메모리가 모잘라서 올리지 못하지만, <code>KV cache (119712)</code> 에러 메세지에 보이듯 더 많이 올릴 수 있습니다. 더 크게 context length를 사용할 수 있죠.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ vllm serve unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit --quantization bitsandbytes --load-format bitsandbytes
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>The model&#39;s max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (119712)
-</span></code></pre></div>
+<h3 id="lora">LoRA 관련</h3>
+<p><code>--enable-lora</code>
+- LoRA 기능을 켜줍니다.</p>
+<p><code>--max-loras</code>
+- LoRA 최대 갯수 지정합니다, (기본은 1)</p>
+<p>```</p>
 
 
 
@@ -645,22 +704,6 @@
     
       
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-          
-          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Contents">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              <div class="md-ellipsis">
-                Contents
-              </div>
-            </div>
-          </a>
         
         
           

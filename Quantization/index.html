@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://jonhpark7966.github.io/vLLM_Course/MultiGPU/">
+        <link rel="canonical" href="https://jonhpark7966.github.io/vLLM_Course/Quantization/">
       
       
-        <link rel="prev" href="../QuickStartonRunPod/">
+        <link rel="prev" href="../Metrics_Prometheus%26Grafana/">
       
       
-        <link rel="next" href="../Metrics_Prometheus%26Grafana/">
+        <link rel="next" href="../LoRA/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>MultiGPU - vLLM COURSE!</title>
+        <title>Quantization - vLLM COURSE!</title>
       
     
     
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#multi-gpu" class="md-skip">
+        <a href="#bitsandbytes" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              MultiGPU
+              Quantization
             
           </span>
         </div>
@@ -257,28 +257,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    MultiGPU
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../MultiGPU/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -287,48 +269,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#multi-gpu" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi - GPU
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Multi - GPU">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      직접 돌려보기!
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -357,10 +297,28 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../Quantization/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Quantization
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -369,6 +327,51 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bitsandbytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      BitsAndBytes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoawq" class="md-nav__link">
+    <span class="md-ellipsis">
+      AutoAWQ
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fp8-bf16" class="md-nav__link">
+    <span class="md-ellipsis">
+      FP8 와 BF16
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -478,26 +481,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#multi-gpu" class="md-nav__link">
+  <a href="#bitsandbytes" class="md-nav__link">
     <span class="md-ellipsis">
-      Multi - GPU
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Multi - GPU">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      직접 돌려보기!
+      BitsAndBytes
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#autoawq" class="md-nav__link">
+    <span class="md-ellipsis">
+      AutoAWQ
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fp8-bf16" class="md-nav__link">
+    <span class="md-ellipsis">
+      FP8 와 BF16
+    </span>
+  </a>
   
 </li>
       
@@ -516,77 +522,40 @@
                   
 
 
-  <h1>MultiGPU</h1>
+  <h1>Quantization</h1>
 
-<p>요즘의 LLM 은 필연적으로 멀티 GPU 혹은 멀티 노드 로 확장된 Inference 가 필요하죠. <br />
-GPU는 하나의 LLM 을 돌려주기에 메모리가 모자르니까요.   </p>
-<h2 id="multi-gpu">Multi - GPU</h2>
-<p>한 노드에 여러 GPU 가 여러개 꼽혀있는 경우입니다. <br />
-사실 이 경우는 매우 쉬워요. 그냥 옵션만 주면 됩니다.  </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span><span class="s2">&quot;meta-llama/Llama-3.1-8B&quot;</span><span class="p">,</span> <span class="n">tensor_parallel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">output</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="s2">&quot;San Franciso is a&quot;</span><span class="p">)</span>
+<p>24년 10월 기준, 가장 대중적으로 사용 되는 Quantization 기법은 BitsAndBytes 로 보입니다.<br />
+AWQ, GPTQ 등 다양한 quantization 기법과 포맷들이 나오고 있어요.  </p>
+<h2 id="bitsandbytes">BitsAndBytes</h2>
+<p>먼저 bitsandbytes 를 설치해줍니다. </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>bitsandbytes&gt;<span class="o">=</span><span class="m">0</span>.44.0
 </span></code></pre></div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>meta-llama/Llama-3.1-8B<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span>--tensor-parallel-size<span class="w"> </span><span class="m">4</span>
+<p>그리고, bitsandbytes 로 만들어진 quantized model을 다운받아 서빙하면 끝입니다.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>vllm<span class="w"> </span>serve<span class="w"> </span>unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit<span class="w"> </span>--quantization<span class="w"> </span>bitsandbytes<span class="w"> </span>--load-format<span class="w"> </span>bitsandbytes
 </span></code></pre></div>
-<p>파이선 또는 shell 커맨드로 위와 같이 주면  끝입니다. 참 쉽죠?  </p>
-<p>여기서 다른 옵션이 하나더 있는데요.  <code>pipeline parallelism</code> 입니다.<br />
-병렬 단계를 텐서레벨에서 주는 것이 아니라 레이어 레벨에서 주는 것입니다.<br />
-<a href="https://colossalai.org/docs/concepts/paradigms_of_parallelism/">Tensor parallelism vs Pipeline Parallelim</a> 에 대한 자세한 내용은 달려있는 링크를 참조하시면 됩니다.  </p>
-<p>예를 들어 한 노드에 현재 gpu 가 8개 있다고 해 봅시다.<br />
-그러면 아래와 같이 하는 방법도 있습니다.  </p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>meta-llama/Llama-3.1-8B<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span>--tensor-parallel-size<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span>--pipeline-parallel-size<span class="w"> </span><span class="m">2</span>
-</span></code></pre></div>
-<p>이렇게 run 을 해주면 하나의 matrix 의 연산에 대해서는 4개의 gpu를 쓰고, Layer가 넘어가면 다음 4개의 gpu 를 사용하니까, gpu 같의 통신 로직이 필요한 경우가 줄겠죠. 대신, 연속된 task 가 없다면 노는 gpu 들이 생길 것 입니다. 일반적으로는 high throughput 을 달성 할 수 있을 텐데, 모델 따라 input token 따라 차이가 있을테니 확정적인 것은 아닙니다. </p>
-<h3 id="_1">직접 돌려보기!</h3>
-<p>A40 (48GB) x2 를 대여하겠습니다.<br />
-대여는 runpod 에서 했고요, 서비스 이름에서 알수 있듯  <code>konuu/llm_ready:latest</code> docker image 를 올려 줍니다.  vllm image 를 안 올린 이유는, model을 처음부터 같이 띄워주는게 싫어서 입니다.</p>
+<p>unsloth 에서 만들어준 4bit 모델을 올려봤습니다. Unsloth 에서 유명한 모델들은 다 이렇게 quantize 해서 올려주니 사용하기가 아주 편합니다.<br />
+그리고, 직접 quantization을 해서 모델을 자르고 싶으실 떄에도 unsloth를 추천합니다. 개인적으로 사용경험이 좋습니다. 쉬워서요.  </p>
 <blockquote>
-<p>(참고) RTX3090 (24GB) x 4 를 먼저 대여했는데 에러가 나서 안뜨는 군요... ;;</p>
+<p>참고. 메모리 사용량 비교</p>
 </blockquote>
-<p>개인적으로는 container 가 올라간 것이 아니라 하드웨어를 빌려주는 LambdaLabs 를 선호하는데, 요즘 GPU 가 동나서... 빌리기가 힘드네요.</p>
-<p><a class="glightbox" href="../rsc/402.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../rsc/402.png" /></a></p>
-<p>서빙을 한번 해보죠, 환경변수 셋업을 한번 합니다.  meta-llama 는 허깅페이스에서 권한을 받아야만 사용이 가능하니, 미리 승인을 받아두시고 huggingface token을 등록합니다. </p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_TOKEN</span><span class="o">=</span>HF-TOKEN
+<p>제 개인 3090 머신에서 테스트한 결과입니다.
+8B 모델은 기본 상태에서 <code>KV cache (41152)</code> 밖에 메모리에 모델에 못 올려서 context 줄이거나 해야합니다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>The model&#39;s max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (41152)
 </span></code></pre></div>
-<p>이제 vLLM 서빙을 시작합니다. 48 기가에 올라가지는 못할 32B 모델을 올려보겠습니다.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>Qwen/Qwen2.5-32B-Instruct
+<p>unsloth 에서 만들어준 4bit quantized model 의 경우 역시 메모리가 모잘라서 올리지 못하지만, <code>KV cache (119712)</code> 에러 메세지에 보이듯 더 많이 올릴 수 있습니다. 더 크게 context length를 사용할 수 있죠.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct
 </span></code></pre></div>
-<p>예상한대로 OutOfMemory 에러가 발생합니다 !!!</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 270.00 MiB. GPU 0 has a total capacity of 44.34 GiB of which 142.81 MiB is free....
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>The model&#39;s max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (119712)```
 </span></code></pre></div>
-<p>2개의 GPU를 동시에 쓰기 위해서 tensor parallel 옵션을 추가하겠습니다.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>vllm<span class="w"> </span>serve<span class="w"> </span>Qwen/Qwen2.5-32B-Instruct<span class="w"> </span>--tensor-parallel-size<span class="w"> </span><span class="m">2</span>
+<h2 id="autoawq">AutoAWQ</h2>
+<p>bnb 랑 방법은 똑같습니다. AWQ 설치해주고, AWQ로 잘려진 모델을 서빙하면 됩니다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pip install autoawq
 </span></code></pre></div>
-<p>이번엔 에러가 없이 서빙이 됩니다.</p>
-<p>Runpod ID 로 serving 이 되고 있는지 날려봅니다, 32k 입력을 받는 Qwen2.5-32B-Instruct 이 서빙 되고 있군요. </p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>❯<span class="w"> </span>curl<span class="w"> </span>https://36g54goiy09px8-8000.proxy.runpod.net/v1/models
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="o">{</span><span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;list&quot;</span>,<span class="s2">&quot;data&quot;</span>:<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;Qwen/Qwen2.5-32B-Instruct&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;model&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729343280,<span class="s2">&quot;owned_by&quot;</span>:<span class="s2">&quot;vllm&quot;</span>,<span class="s2">&quot;root&quot;</span>:<span class="s2">&quot;Qwen/Qwen2.5-32B-Instruct&quot;</span>,<span class="s2">&quot;parent&quot;</span>:null,<span class="s2">&quot;max_model_len&quot;</span>:32768,<span class="s2">&quot;permission&quot;</span>:<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;modelperm-7eef3c565e63464d83e0ac30fb235dc0&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;model_permission&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729343280,<span class="s2">&quot;allow_create_engine&quot;</span>:false,<span class="s2">&quot;allow_sampling&quot;</span>:true,<span class="s2">&quot;allow_logprobs&quot;</span>:true,<span class="s2">&quot;allow_search_indices&quot;</span>:false,<span class="s2">&quot;allow_view&quot;</span>:true,<span class="s2">&quot;allow_fine_tuning&quot;</span>:false,<span class="s2">&quot;organization&quot;</span>:<span class="s2">&quot;*&quot;</span>,<span class="s2">&quot;group&quot;</span>:null,<span class="s2">&quot;is_blocking&quot;</span>:false<span class="o">}]}]}</span>%<span class="w">   </span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>vllm<span class="w"> </span>serve<span class="w"> </span>Qwen/Qwen2.5-32B-Instruct-AWQ<span class="w"> </span>--quantization<span class="w"> </span>awq
 </span></code></pre></div>
-<p>OpenAI compatible 한 서버니, chat completion api 를 호출합니다. 대답 토큰이 날라옵니다 !!</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>❯<span class="w"> </span>curl<span class="w"> </span>https://36g54goiy09px8-8000.proxy.runpod.net/v1/chat/completions<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$API_KEY</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s1">    &quot;model&quot;: &quot;Qwen/Qwen2.5-32B-Instruct&quot;,</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s1">    &quot;messages&quot;: [</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s1">      {</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s1">        &quot;role&quot;: &quot;system&quot;,</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s1">        &quot;content&quot;: &quot;You are a helpful assistant.&quot;</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="s1">      },</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="s1">      {</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="s1">        &quot;role&quot;: &quot;user&quot;,</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="s1">        &quot;content&quot;: &quot;Hello!&quot;</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s1">      }</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s1">    ]</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="s1">  }&#39;</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="o">{</span><span class="s2">&quot;id&quot;</span>:<span class="s2">&quot;chat-20d3a3be6faf42c89dc9dbff5c1c5f01&quot;</span>,<span class="s2">&quot;object&quot;</span>:<span class="s2">&quot;chat.completion&quot;</span>,<span class="s2">&quot;created&quot;</span>:1729343397,<span class="s2">&quot;model&quot;</span>:<span class="s2">&quot;Qwen/Qwen2.5-32B-Instruct&quot;</span>,<span class="s2">&quot;choices&quot;</span>:<span class="o">[{</span><span class="s2">&quot;index&quot;</span>:0,<span class="s2">&quot;message&quot;</span>:<span class="o">{</span><span class="s2">&quot;role&quot;</span>:<span class="s2">&quot;assistant&quot;</span>,<span class="s2">&quot;content&quot;</span>:<span class="s2">&quot;Hello! How can I assist you today?&quot;</span>,<span class="s2">&quot;tool_calls&quot;</span>:<span class="o">[]}</span>,<span class="s2">&quot;logprobs&quot;</span>:null,<span class="s2">&quot;finish_reason&quot;</span>:<span class="s2">&quot;stop&quot;</span>,<span class="s2">&quot;stop_reason&quot;</span>:null<span class="o">}]</span>,<span class="s2">&quot;usage&quot;</span>:<span class="o">{</span><span class="s2">&quot;prompt_tokens&quot;</span>:21,<span class="s2">&quot;total_tokens&quot;</span>:31,<span class="s2">&quot;completion_tokens&quot;</span>:10<span class="o">}</span>,<span class="s2">&quot;prompt_logprobs&quot;</span>:null<span class="o">}</span>%<span class="w">  </span>
-</span></code></pre></div>
+<p>A40 (48GB) 기준 올라가지 않던 32B 모델이 AWQ 와 함께라면 구동이 가능합니다 !!</p>
+<h2 id="fp8-bf16">FP8 와 BF16</h2>
+<p>최근 몇년새에 NVIDIA 가 지원하기 시작한 quantization 기법들 입니다. 하드웨어 지원을 통해 정직한 (?) 성능향상을 이뤄냅니다.</p>
 
 
 
@@ -616,7 +585,7 @@ GPU는 하나의 LLM 을 돌려주기에 메모리가 모자르니까요.   </p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../QuickStartonRunPod/" class="md-footer__link md-footer__link--prev" aria-label="Previous: QuickStartonRunPod">
+          <a href="../Metrics_Prometheus%26Grafana/" class="md-footer__link md-footer__link--prev" aria-label="Previous: vLLM 프로메테우스 &amp;amp; 그라파나 모니터링">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -626,20 +595,20 @@ GPU는 하나의 LLM 을 돌려주기에 메모리가 모자르니까요.   </p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                QuickStartonRunPod
+                vLLM 프로메테우스 &amp; 그라파나 모니터링
               </div>
             </div>
           </a>
         
         
           
-          <a href="../Metrics_Prometheus%26Grafana/" class="md-footer__link md-footer__link--next" aria-label="Next: vLLM 프로메테우스 &amp;amp; 그라파나 모니터링">
+          <a href="../LoRA/" class="md-footer__link md-footer__link--next" aria-label="Next: LoRA Adapters">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                vLLM 프로메테우스 &amp; 그라파나 모니터링
+                LoRA Adapters
               </div>
             </div>
             <div class="md-footer__button md-icon">
