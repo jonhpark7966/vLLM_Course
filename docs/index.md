@@ -1,14 +1,5 @@
 
 
-
-# Contents
-
-
-- vLLM vs Other Platforms
-- Nvidia Triton
-- vLLM OpenAI compatible serving
-- serverless
-- Distributed Inference (Multi GPU & Multi Node)
-- Scaling up
-- Quantization
-- Own Model
+vLLM 강의에 오신 것을 환영합니다.   
+좌측 네비게이션을 따라 필요한 파트들을 열람하시고 따라해보시면 됩니다.  
+[runpod](runpod.io) 에서 gpu 서버를 빌리고 따라가는 것을 기준으로 작성되어있습니다.  

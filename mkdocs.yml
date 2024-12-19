@@ -44,9 +44,13 @@ markdown_extensions:
   - pymdownx.superfences
 
 nav:
-  - index.md
+  - "index.md"
   - "QuickStartonRunPod.md"
   - "MultiGPU.md"
+  - "Metrics_Prometheus&Grafana.md"
+  - "Quantization.md"
+  - "LoRA.md"
+  - "VisionModel.md"
   - "RunpodServerless.md"
   - "Scaling.md"
 

@@ -15,19 +15,19 @@ vLLM 이 아닌 Stable Diffusion 이나 임베딩, (캡처에는 빠졌지만) w
 
 1. Model 과 vLLM 설정. 권한이 필요하다면, HF token 까지 설정해주면 됩니다.
 
-![[serverless_2.png]]
+![](./rsc/serverless_2.png)
 
 2. 두번째는 vLLM 설정입니다. 아주 아주 많은 셋팅 요소들이 있는데, vLLM engine의 argument 들입니다. 
    자세한 내용은 [QuickStart](./QuickstartonRunPod) 페이지를 보시면 CLI 상에서의 설명이 있습니다. 이와 똑같은 옵션들이 거의 그대로 UI 로 구성 된 것이니 필요에 맞게 값들을 입력해주면 됩니다. 
 
 - vLLM 이 아닌 serverlss setting 란이 더 있는데, 로깅이랑 얼마나 동시 입력을 처리할 것인가에 대한 설정입니다.
 
-![[serverless_3.png]]
+![](./rsc/serverless_3.png)
 
 
 3. 마지막은 GPU 설정을 하는데, 메모리를 기준으로 지정되어있습니다. 메모리가 곧 올릴 수 있는 모델을 결정하니 이렇게 만들었나 봅니다. 같은 16기가 GPU 여도 여러가지 GPU 가 있을 수 있는데, 알아서 남는 자원 보고 띄워줍니다.
 
-![[serverless_4.png]]
+![](./rsc/serverless_4.png)
 
 
 

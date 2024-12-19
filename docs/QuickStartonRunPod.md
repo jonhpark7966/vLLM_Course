@@ -11,6 +11,12 @@ A40 (48GB) x2 를 대여하겠습니다.
  
 ![](./rsc/402.png)
 
+지금은 vllm 이 이미 설치된 컨테이너를 띄우지만, 없다면 그냥 pip 로 설치하시면 됩니다.
+```bash
+# Install vLLM with CUDA 12.1.
+$ pip install vllm
+```
+
 
 서빙을 한번 해보죠, 환경변수 셋업을 한번 합니다.  meta-llama 는 허깅페이스에서 권한을 받아야만 사용이 가능하니, 미리 승인을 받아두시고 huggingface token을 등록합니다. 
 
@@ -19,6 +25,8 @@ export HF_TOKEN=HF-TOKEN
 ```
 
 이제 vLLM 서빙을 시작합니다. 
+
+> default 로는 8000 포트로 api endpoint 들이 생기는 데, runpod 에서 이를 받을 수 있게, https port 들을 미리 설정해둬야 합니다!!!
 
 ```bash
 vllm serve meta-llama/Llama-3.1-8B-Instruct
@@ -66,6 +74,10 @@ OpenAI compatible 한 서버니, chat completion api 를 호출합니다. 대답
 `--model`
 - 당연히 첫번째는 모델이고요, hugging face 주소를 입력하면 됩니다. huggingface 대신 modelscope 으로 갈 수도 있긴한데, 중국 쪽을 타겟으로 하지 않는 한 아마도 huggingface 면 충분하지 않을까 싶네요.
 
+`--disable-log-requests`
+- 로깅 끄기, 실제로 서빙하면 로그는 속도를 위해 끄시는게 좋겠죠.
+
+
 
 ### 메모리 관련
 
@@ -78,6 +90,9 @@ OpenAI compatible 한 서버니, chat completion api 를 호출합니다. 대답
 `--gpu-memory-utilization`
 - GPU 메모리 사용량을 지정합니다. vLLM 의 핵심 알고리즘인 Paged Attention 특성상 메모리를 greedy 하게 가져가기 떄문에, 지정하면 그냥 다 먹습니다, 다른 GPU 메모리가 필요한 일이 있다면, 망가지겠죠.
 - 이는 0 ~ 1 비율이고, 전체 메모리에 대한 비율이 아니라 남아있는 메모리에 대한 비율입니다. LLM 을 서빙하면 보통은 하나를 통쨰로 가져갈테니 default 값인 0.9 가 나쁘지 않은 것 같습니다.
+
+`--cpu-offload-gb`
+- CPU 메모리에 오프로딩합니다, 24GB GPU 가 있고, 10GB 를 오프로딩 해주면, 34GB 있다고 볼 수 있고요, 그래서 13B BF16 모델 (26GB) 도 돌릴 수가 있습니다. 느립니다...
 
 ### Multi GPU 관련
 
@@ -101,23 +116,10 @@ OpenAI compatible 한 서버니, chat completion api 를 호출합니다. 대답
 
 `--quantization, -q`
 - Quantized 옵션입니다. 다음과 같은 후보들이 있죠. aqlm, awq, deepspeedfp, tpu_int8, fp8, fbgemm_fp8, modelopt, marlin, gguf, gptq_marlin_24, gptq_marlin, awq_marlin, gptq, compressed-tensors, bitsandbytes, qqq, experts_int8, neuron_quant, ipex, None
-- 참. 여기는 통일이 안되어서 갑갑한데요, 그래도 bnb 가 가장 많이 사용되는 것 같고요, 만들어진 모델을 잘 보고 맞춰주시면 됩니다. 직접 quantization 하실 분들은 이미 잘 아실테니 자세한 설명은 생략합니다.
-- 
-
-On RTX3090 Ubuntu
-
-```
-$ vllm serve meta-llama/Meta-Llama-3.1-8B-Instruct
-
-The model's max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (41152)
-```
-
-```
-$ vllm serve unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit --quantization bitsandbytes --load-format bitsandbytes
-
-The model's max seq len (131072) is larger than the maximum number of tokens that can be stored in KV cache (119712)
-```
-  
+- 참. 여기는 통일이 안되어서 갑갑한데요, 그래도 bnb 가 가장 많이 사용되는 것 같고요, 만들어진 모델을 잘 보고 맞춰주시면 됩니다. 
+- Bitsandbytes 가 허깅페이스에서 가장 대중적인 포맷이나, 효율성이나 성능이 제일 좋은 것은 아니라고 보여집니다.
+- AWQ 나 GPTQ 를 많이 사용하는 추세 입니다.
+- 직접 quantization 하실 분들은 이미 잘 아실테니 자세한 설명은 생략하고요, 대부분은 inference 서빙을 시작하기 전에 다양하게 quantiazation 한 후, 모두 테스트를 돌려보고, 성능/효율을 비교하여 결정하는 것 같습니다.
 
 
 `--load-format`
@@ -126,52 +128,15 @@ The model's max seq len (131072) is larger than the maximum number of tokens tha
 - 가능 옵션들:  auto, pt, safetensors, npcache, dummy, tensorizer, sharded_state, gguf, bitsandbytes, mistral
 
 
+### LoRA 관련
 
+`--enable-lora`
+- LoRA 기능을 켜줍니다.
 
-## Metrics
-
-vllm 을 서빙하면 `/metrics` endpoint 에서 지표들을 관찰 가능합니다.
+`--max-loras`
+- LoRA 최대 갯수 지정합니다, (기본은 1)
 
 ```
-# HELP vllm:num_requests_running Number of requests currently running on GPU.
-# TYPE vllm:num_requests_running gauge
-vllm:num_requests_running{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:num_requests_swapped Number of requests swapped to CPU.
-# TYPE vllm:num_requests_swapped gauge
-vllm:num_requests_swapped{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:num_requests_waiting Number of requests waiting to be processed.
-# TYPE vllm:num_requests_waiting gauge
-vllm:num_requests_waiting{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:gpu_cache_usage_perc GPU KV-cache usage. 1 means 100 percent usage.
-# TYPE vllm:gpu_cache_usage_perc gauge
-vllm:gpu_cache_usage_perc{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:cpu_cache_usage_perc CPU KV-cache usage. 1 means 100 percent usage.
-# TYPE vllm:cpu_cache_usage_perc gauge
-vllm:cpu_cache_usage_perc{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:cpu_prefix_cache_hit_rate CPU prefix cache block hit rate.
-# TYPE vllm:cpu_prefix_cache_hit_rate gauge
-vllm:cpu_prefix_cache_hit_rate{model_name="meta-llama/Llama-3.1-8B-Instruct"} -1.0
-# HELP vllm:gpu_prefix_cache_hit_rate GPU prefix cache block hit rate.
-# TYPE vllm:gpu_prefix_cache_hit_rate gauge
-vllm:gpu_prefix_cache_hit_rate{model_name="meta-llama/Llama-3.1-8B-Instruct"} -1.0
-# HELP vllm:avg_prompt_throughput_toks_per_s Average prefill throughput in tokens/s.
-# TYPE vllm:avg_prompt_throughput_toks_per_s gauge
-vllm:avg_prompt_throughput_toks_per_s{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:avg_generation_throughput_toks_per_s Average generation throughput in tokens/s.
-# TYPE vllm:avg_generation_throughput_toks_per_s gauge
-vllm:avg_generation_throughput_toks_per_s{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:cache_config_info Information of the LLMEngine CacheConfig
-# TYPE vllm:cache_config_info gauge
-vllm:cache_config_info{block_size="16",cache_dtype="auto",cpu_offload_gb="0",enable_prefix_caching="False",gpu_memory_utilization="0.9",num_cpu_blocks="2048",num_gpu_blocks="2375",num_gpu_blocks_override="None",sliding_window="None",swap_space_bytes="4294967296"} 1.0
-# HELP vllm:num_preemptions_total Cumulative number of preemption from the engine.
-# TYPE vllm:num_preemptions_total counter
-vllm:num_preemptions_total{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:prompt_tokens_total Number of prefill tokens processed.
-# TYPE vllm:prompt_tokens_total counter
-vllm:prompt_tokens_total{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-# HELP vllm:generation_tokens_total Number of generation tokens processed.
-# TYPE vllm:generation_tokens_total counter
-vllm:generation_tokens_total{model_name="meta-llama/Llama-3.1-8B-Instruct"} 0.0
-```
+  
 
-참고로, vllm backend 를 사용하는 nvidia triton 컨테이너는 24.08 버전 부터 지원하니 참고하세요.
+
